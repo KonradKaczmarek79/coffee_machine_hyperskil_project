@@ -57,3 +57,57 @@ class CoffeeMachine:
             self.__buy_latte()
         elif kind_of_coffee == "3":
             self.__buy_cappuccino()
+
+        def fill_supplies(self, key, value):
+        """Add specified quantity of supplies to the coffee machine.
+
+        :param key: possible values of a key ['water', 'milk', 'coffee_beans', 'disposable_cups', 'money']
+        :param value: how many supply you want to add
+        :return:
+        """
+        if key in self.__dict__ and key != 'money':
+            self.__dict__[key] += value
+
+    def take_money(self):
+        money = self.money
+        self.money = 0
+        return money
+
+
+def display_coffee_machine_message(coffee_machine: CoffeeMachine):
+    print(coffee_machine)
+    print()
+
+def fill_each_supply(coffee_machine: CoffeeMachine):
+    message_prefix = "Write how many "
+    message_suffix = " you want to add:\n"
+    units = ("ml of ", "ml of ", "grams of ", "")
+    supplies = ("water", "milk", "coffee_beans", "disposable_cups")
+    for supply, unit in zip(supplies, units):
+        quantity = int(input(f"{message_prefix}{unit}{supply.replace('_', ' ')}{message_suffix}"))
+        coffee_machine.fill_supplies(supply, quantity)
+
+
+def perform_action(coffee_machine: CoffeeMachine):
+    action = input("Write action (buy, fill, take):\n")
+    if action == "buy":
+        kind_of_coffee = input("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino: \n")
+        coffee_machine.buy_cup_of_coffee(kind_of_coffee)
+    elif action == "fill":
+        fill_each_supply(coffee_machine)
+    elif action == "take":
+        money = coffee_machine.take_money()
+        print(f"I gave you ${money}")
+
+
+def main():
+
+    coffee_machine = CoffeeMachine(400, 540, 120, 9, 550)
+    display_coffee_machine_message(coffee_machine)
+    perform_action(coffee_machine)
+    print()
+    display_coffee_machine_message(coffee_machine)
+
+
+if __name__ == '__main__':
+    main()
